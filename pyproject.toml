@@ -11,7 +11,9 @@ dynamic = [ "version" ]
 keywords = [ "kill", "process", "old", "slow", "long time", "monitoring", "find", "ps", "smart", "filter", "inspect" ]
 
 dependencies = [
-  'psutil >= 6.0.0'
+  'psutil >= 6.0.0',
+  'rich >= 13.7.1',
+  'rich-argparse >= 1.5.2'
 ]
 authors = [
   { name="Yaroslav Polyakov", email="yaroslaff@gmail.com" },

@@ -13,24 +13,27 @@ your system may have `pip3` instead of `pip`.
 See all my ssh sessions:
 ~~~shell
 $ dieyoung ssh
-732333 7h37m41s ssh alv
-742297 6h27m58s ssh jul
-745335 6h14m38s ssh mx
-875490 6s ssh -i /home/xenon/.ssh/id_ed25519 mx
+732333 8h ssh alv
+742297 7h ssh jul
+745335 6h ssh mx
+875490 38m ssh -i /home/xenon/.ssh/id_ed25519 mx
+880910 25m ssh mx -i /home/xenon/.ssh/id_ed25519
 ~~~
+Format is simple: pid, age, cmdline
 
 Now, lets suppose we want to find only ssh to mx:
 ~~~shell
 $ dieyoung ssh mx
-745335 6h15m40s ssh mx
-875490 1m8s ssh -i /home/xenon/.ssh/id_ed25519 mx
+745335 6h ssh mx
+875490 39m ssh -i /home/xenon/.ssh/id_ed25519 mx
+880910 25m ssh mx -i /home/xenon/.ssh/id_ed25519
 ~~~
-Two sessions are found, because each of them has "ssh" and "mx" in cmdline (in any order). This is how `--mode any` (default mode), process matches our pattern if all words from pattern are found *anywhere* in process cmdline, even if there are other arguments.
+Three sessions are found, because each of them has "ssh" and "mx" in cmdline (in any order). This is how `--mode any` (default mode), process matches our pattern if all words from pattern are found *anywhere* in process cmdline, even if there are other arguments.
 
 `--mode start`: First words of cmdline must match pattern, e.g. 
 ~~~shell
 $ dieyoung -m start -- ssh -i 
-875490 11m14s ssh -i /home/xenon/.ssh/id_ed25519 mx
+875490 39m ssh -i /home/xenon/.ssh/id_ed25519 mx
 ~~~
 But this filter will not find process `ssh mx -i /home/xenon/.ssh/id_ed25519` (because `ssh mx` is not `ssh -i`). 
 Note, we used `--` to separate PATTERN (`ssh -i`) from dieyoung arguments.
@@ -38,7 +41,7 @@ Note, we used `--` to separate PATTERN (`ssh -i`) from dieyoung arguments.
 `--mode full`: process cmdline must fully match pattern, e.g.
 ~~~shell
 $ dieyoung -m full -- ssh -i /home/xenon/.ssh/id_ed25519 mx
-875490 14m43s ssh -i /home/xenon/.ssh/id_ed25519 mx
+875490 40m ssh -i /home/xenon/.ssh/id_ed25519 mx
 ~~~
 
 ## Filter by age, user and executable
