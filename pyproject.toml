@@ -1,0 +1,37 @@
+[build-system]
+# requires = ["setuptools >= 40.6.0", "wheel"]
+requires = ["hatchling", "wheel"]
+
+# build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
+
+[project]
+name="dieyoung"
+dynamic = [ "version" ]
+keywords = [ "kill", "process", "old", "slow", "long time", "monitoring", "find", "ps", "smart", "filter", "inspect" ]
+
+dependencies = [
+  'psutil >= 6.0.0'
+]
+authors = [
+  { name="Yaroslav Polyakov", email="yaroslaff@gmail.com" },
+]
+description = "Find (and kill) long running processes by name and arguments"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/yaroslaff/dieyoung"
+Issues = "https://github.com/yaroslaff/dieyoung/issues"
+
+
+[project.scripts]
+dieyoung = "dieyoung:main"
+
+[tool.hatch.version]
+path = 'dieyoung/__init__.py'
