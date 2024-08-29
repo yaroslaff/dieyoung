@@ -7,7 +7,7 @@ import time
 from rich_argparse import RawTextRichHelpFormatter
 from rich.markdown import Markdown
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 args = None
 max_age = 0

@@ -28,7 +28,7 @@ $ dieyoung ssh mx
 875490 39m ssh -i /home/xenon/.ssh/id_ed25519 mx
 880910 25m ssh mx -i /home/xenon/.ssh/id_ed25519
 ~~~
-Three sessions are found, because each of them has "ssh" and "mx" in cmdline (in any order). This is how `--mode any` (default mode), process matches our pattern if all words from pattern are found *anywhere* in process cmdline, even if there are other arguments.
+Three sessions are found, because each of them has "ssh" and "mx" in cmdline (in any order). This is how `--mode any` works (default mode), processes matches our pattern if all words from pattern are found *anywhere* in process cmdline, even if there are other arguments.
 
 `--mode start`: First words of cmdline must match pattern, e.g. 
 ~~~shell
