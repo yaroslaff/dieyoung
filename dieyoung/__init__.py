@@ -7,7 +7,7 @@ import time
 from rich_argparse import RawTextRichHelpFormatter
 from rich.markdown import Markdown
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 args = None
 max_age = 0
@@ -80,6 +80,12 @@ def get_args():
 
     return parser.parse_args()
 
+def print_zombie_process(p: psutil.Process):
+        created = p.create_time()
+        age = int(time.time() - created)
+        rich.print(f"[red]WARN: zombie process[/red] {p.name()!r} PID: {p.pid} PPID: {p.ppid()} age: {seconds2human(age, sep=' ')}")
+        
+
 def print_process(p: psutil.Process):
     age = int(time.time() - p.create_time())
 
@@ -140,17 +146,19 @@ def main():
     max_age = human2seconds(args.age)
 
     for p in psutil.process_iter():
+        
         try:
+            if p.status() == psutil.STATUS_ZOMBIE:
+                print_zombie_process(p)
+                continue
+
             pid = p.pid
         # skip other processes
-            try:
-                if not process_match(p, args):
-                    continue
-            except psutil.ZombieProcess:
+            if not process_match(p, args):
                 continue
 
             age = int(time.time() - p.create_time())
-            print_process(p)            
+            print_process(p)
             if args.terminate:
                 p.terminate()
                 p.wait()
@@ -159,5 +167,5 @@ def main():
                 p.kill()
                 p.wait()
                 print(f"killed {pid}!")
-        except psutil.AccessDenied:
+        except (psutil.AccessDenied, psutil.ZombieProcess):
             pass
