@@ -7,7 +7,7 @@ import time
 from rich_argparse import RawTextRichHelpFormatter
 from rich.markdown import Markdown
 
-__version__ = '0.0.2'
+__version__ = '0.0.4'
 
 args = None
 max_age = 0
@@ -143,8 +143,12 @@ def main():
         try:
             pid = p.pid
         # skip other processes
-            if not process_match(p, args):
+            try:
+                if not process_match(p, args):
+                    continue
+            except psutil.ZombieProcess:
                 continue
+
             age = int(time.time() - p.create_time())
             print_process(p)            
             if args.terminate:
