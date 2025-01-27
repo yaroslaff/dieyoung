@@ -7,7 +7,7 @@ import time
 from rich_argparse import RawTextRichHelpFormatter
 from rich.markdown import Markdown
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
 args = None
 max_age = 0
@@ -155,7 +155,7 @@ def count_processes(args):
             if process_match(p, args):
                 count += 1
 
-        except (psutil.AccessDenied, psutil.ZombieProcess):
+        except (psutil.AccessDenied, psutil.ZombieProcess, psutil.NoSuchProcess):
             pass
     return count
 
@@ -195,5 +195,5 @@ def main():
                 p.kill()
                 p.wait()
                 print(f"killed {pid}!")
-        except (psutil.AccessDenied, psutil.ZombieProcess):
+        except (psutil.AccessDenied, psutil.ZombieProcess, psutil.NoSuchProcess):
             pass
