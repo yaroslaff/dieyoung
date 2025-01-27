@@ -7,7 +7,7 @@ import time
 from rich_argparse import RawTextRichHelpFormatter
 from rich.markdown import Markdown
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
 args = None
 max_age = 0
@@ -66,6 +66,7 @@ def get_args():
     g = parser.add_argument_group('Stopping processes')
     g.add_argument('--kill', action='store_true', default=False, help=f'Brutally kill it with [red]SIGKILL[/red]!')
     g.add_argument('--terminate', action='store_true', default=False, help=f'Gracefully terminate with SIGTERM')
+    g.add_argument('--notmore', type=int, metavar='N', default=1, help=f'kill not more then N processes (sanity check)')
 
     g = parser.add_argument_group('Another options')
     g.add_argument('-j','--json', action='store_true', default=False, help=f'Output as JSON')
@@ -140,10 +141,37 @@ def process_match(p: psutil.Process, args: argparse.Namespace):
 
     return False
 
+
+def count_processes(args):
+    count = 0
+    for p in psutil.process_iter():        
+        try:
+            if p.status() == psutil.STATUS_ZOMBIE:
+                print_zombie_process(p)
+                continue
+
+            pid = p.pid
+        # skip other processes
+            if process_match(p, args):
+                count += 1
+
+        except (psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return count
+
+
 def main():
     global args, max_age
     args = get_args()
     max_age = human2seconds(args.age)
+
+    count = count_processes(args)
+
+    print(f"# {count} processes match")
+
+    if (args.terminate or args.kill) and count > args.notmore:
+        print("IGNORED: too many processes to kill, use --notmore option")
+        return
 
     for p in psutil.process_iter():
         

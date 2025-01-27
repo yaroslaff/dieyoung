@@ -58,5 +58,6 @@ After you found processes, you may kill it manually with `kill` command, or use 
 ## Inspect more details of processes
 Add `-j` / `--json` to show more info about processes
 
-
+## Foolproof protection (--notmore)
+If `--kill` or `--terminate` given, dieyoung will count number of matching processes and refuse if it has to kill more then `--notmore N`. Default value is 1. 
 
